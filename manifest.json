@@ -1,9 +1,16 @@
 {
-  "name": "Posture Improvement Planner",
-  "short_name": "posture-impr",
+  "name": "姿勢改善プランナー",
+  "short_name": "姿勢改善",
   "start_url": "/posture-improvement-planner/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#7c3aed",
-  "scope": "/posture-improvement-planner/"
+  "theme_color": "#EA580C",
+  "scope": "/posture-improvement-planner/",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧍</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
 }
