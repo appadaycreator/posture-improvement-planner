@@ -37,6 +37,7 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
     <link rel="dns-prefetch" href="https://www.clarity.ms">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <!-- Clarity -->
     <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","s3t9vl8h3v");</script>
     <!-- AdSense -->
@@ -67,6 +68,18 @@ j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
         .result-value { font-size: 36px; font-weight: 700; color: #EA580C; text-align: center; padding: 16px 0; }
         .badge { display: inline-block; background: #EA580C20; color: #EA580C; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+        select { color: #555; }
+        select option:first-child { color: #999; }
+        .error-message { color: #dc2626; font-size: 12px; margin-top: 6px; display: none; }
+        .error-message.show { display: block; }
+        #resultActions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .action-btn { flex: 1; min-width: 120px; background: #f0f9ff; color: #0ea5e9; border: 1.5px solid #0ea5e9; padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .action-btn:hover { background: #0ea5e9; color: white; }
+        #scoreChartContainer { margin-top: 14px; max-width: 100%; }
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #16a34a; color: white; padding: 12px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s forwards; max-width: 280px; word-wrap: break-word; }
+        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+        @media (max-width: 480px) { .toast { bottom: 16px; right: 16px; max-width: calc(100% - 32px); } }
         @media (max-width: 480px) {
             .site-header { padding: 24px 16px; }
             .site-header h1 { font-size: 20px; }
@@ -103,6 +116,14 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         <h1>姿勢改善プランナー</h1>
         <p>デスクワーク時間・痛みの部位から最適な姿勢改善エクササイズプランを作成。</p>
     </header>
+<div style="background:#4338ca;padding:5px 12px;text-align:right;font-size:.78rem"><a href="/blog/" style="color:#c7d2fe;text-decoration:none;font-weight:600">📖 コラム</a>&nbsp;｜&nbsp;<a href="/" style="color:#c7d2fe;text-decoration:none">ホーム</a></div>
+<!-- r21-breadcrumb -->
+<nav aria-label="パンくずリスト" style="background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:5px 16px;font-size:.78rem;color:#6b7280;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
+  <a href="/" style="color:#4f46e5;text-decoration:none">ホーム</a>
+  <span style="margin:0 .35rem;color:#9ca3af">›</span>
+  <span style="color:#374151">姿勢改善プランナー【無料】自動作成ツール</span>
+</nav>
+
 
     <main id="main-content" class="container" role="main" aria-label="姿勢改善プランナーのメインコンテンツ">
 <nav aria-label="パンくずリスト" style="background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:6px 0;">
@@ -123,26 +144,28 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
           <h2 style="font-size:18px;font-weight:700;margin-bottom:16px;">🧍 姿勢改善プランナー</h2>
           <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">あなたの生活習慣と不調をもとに、最適な姿勢改善エクササイズプランを自動作成します。</p>
 
-          <label for="workHours" id="label_workHours">💻 1日のデスクワーク・PC作業時間</label>
-          <select id="workHours" onchange="validateForm()">
+          <label for="workHours" id="label_workHours">💻 1日のデスクワーク・PC作業時間 <span style="font-weight:400;color:#999;">（目安）</span></label>
+          <select id="workHours" onchange="validateForm()" aria-required="true" aria-label="1日のデスクワーク・PC作業時間を選択してください">
             <option value="">選択してください</option>
             <option value="1">1〜2時間（短め）</option>
             <option value="2">3〜4時間（中程度）</option>
             <option value="3">5〜6時間（長め）</option>
             <option value="4">7時間以上（ヘビー）</option>
           </select>
+          <div class="error-message" id="error_workHours">💻 1日のデスクワーク・PC作業時間を選択してください</div>
 
-          <label id="label_pain" style="margin-top:16px;margin-bottom:8px;">😣 気になる痛みや不調の部位（複数選択可）</label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;" role="group" aria-label="痛みの部位">
-            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_neck" value="neck" onchange="validateForm()"> 首・肩</label>
-            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_back" value="back" onchange="validateForm()"> 腰</label>
-            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_eyes" value="eyes" onchange="validateForm()"> 目の疲れ・頭痛</label>
-            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_hip" value="hip" onchange="validateForm()"> 膝・股関節</label>
-            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_whole" value="whole" onchange="validateForm()"> 全身の疲れ</label>
+          <label id="label_pain" style="margin-top:16px;margin-bottom:8px;">😣 気になる痛みや不調の部位 <span style="font-weight:400;color:#999;">（複数選択可）</span></label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;" role="group" aria-label="気になる痛みや不調の部位を選択" aria-required="true">
+            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_neck" value="neck" onchange="validateForm()" aria-label="首・肩の痛みまたは不調"> 首・肩</label>
+            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_back" value="back" onchange="validateForm()" aria-label="腰の痛みまたは不調"> 腰</label>
+            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_eyes" value="eyes" onchange="validateForm()" aria-label="目の疲れまたは頭痛"> 目の疲れ・頭痛</label>
+            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_hip" value="hip" onchange="validateForm()" aria-label="膝または股関節の痛み"> 膝・股関節</label>
+            <label style="margin:0;font-weight:400;font-size:14px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pain_whole" value="whole" onchange="validateForm()" aria-label="全身の疲れ"> 全身の疲れ</label>
           </div>
+          <div class="error-message" id="error_pain">😣 気になる痛みや不調の部位を1つ以上選択してください</div>
 
           <label for="postureType" id="label_postureType" style="margin-top:16px;">🪑 あてはまる姿勢の悩み</label>
-          <select id="postureType" onchange="validateForm()">
+          <select id="postureType" onchange="validateForm()" aria-required="true" aria-label="猫背・反り腰・スマホ首などの姿勢の悩みを選択してください">
             <option value="">選択してください</option>
             <option value="hunch">猫背気味（背中が丸まる）</option>
             <option value="lordosis">反り腰（腰が反っている）</option>
@@ -150,16 +173,23 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
             <option value="pelvic">骨盤のゆがみ（左右差がある）</option>
             <option value="mixed">複合的（いくつも当てはまる）</option>
           </select>
+          <div class="error-message" id="error_postureType">🪑 あてはまる姿勢の悩みを選択してください</div>
 
           <label for="exerciseHabit" id="label_exerciseHabit" style="margin-top:16px;">🏃 普段の運動習慣</label>
-          <select id="exerciseHabit" onchange="validateForm()">
+          <select id="exerciseHabit" onchange="validateForm()" aria-required="true" aria-label="週の運動頻度を選択してください">
             <option value="">選択してください</option>
             <option value="none">ほとんどしない</option>
             <option value="low">週1〜2回</option>
             <option value="high">週3回以上</option>
           </select>
+          <div class="error-message" id="error_exerciseHabit">🏃 普段の運動習慣を選択してください</div>
+
+          <div class="error-message" id="error_all" style="margin-top:12px;font-size:14px;text-align:center;">❌ 必須項目をすべて入力してください</div>
 
           <button id="calcButton" class="btn" style="margin-top:20px;" disabled onclick="calculate()">姿勢改善プランを作成する</button>
+
+          <button type="button" id="restoreButton" class="btn" style="margin-top:8px;background:#9ca3af;" onclick="restorePreviousData()">⏮️ 前回のデータを復元</button>
+          <button type="button" id="clearButton" class="btn" style="margin-top:8px;background:#ef4444;" onclick="clearAllData()">🗑️ データをクリア</button>
 
           <div class="result" id="result" style="margin-top:16px;">
             <div class="card" style="background:#fff7ed;border:2px solid #EA580C;">
@@ -169,6 +199,14 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
                 <div id="riskLabel" style="font-size:14px;font-weight:600;margin-top:4px;"></div>
               </div>
               <div id="breakdownOutput"></div>
+              <div id="scoreChartContainer" style="position:relative;width:100%;max-width:400px;margin:0 auto 16px;height:250px;">
+                <canvas id="scoreChart"></canvas>
+              </div>
+              <div id="resultActions">
+                <button type="button" class="action-btn" onclick="printResult()" title="結果を印刷">🖨️ 印刷</button>
+                <button type="button" class="action-btn" onclick="copyResultToClipboard()" title="結果をコピー">📋 コピー</button>
+                <button type="button" class="action-btn" onclick="downloadResult()" title="結果をダウンロード">📥 保存</button>
+              </div>
               <hr style="border:none;border-top:1px solid #fde68a;margin:12px 0;">
               <h3 style="font-size:15px;font-weight:700;color:#374151;margin-bottom:10px;">📋 あなた専用エクササイズプラン</h3>
               <div id="planList" style="display:flex;flex-direction:column;gap:8px;"></div>
@@ -242,10 +280,93 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px;margin:8px 0;font-size:12px;color:#92400e;">
             <strong>⚠️ 免責事項</strong>：本ツールの計算・診断結果はあくまで参考情報です。医療・法律・税務・投資等の専門的判断が必要な場合は、必ず資格を持つ専門家にご相談ください。本サービスの利用により生じた損害について、当サービスは一切の責任を負いません。
         </div>
-    </main>
+    
+<section aria-labelledby="faq-h" class="bg-white rounded-2xl shadow-md p-4 mb-4" style="max-width:740px;margin-left:auto;margin-right:auto">
+  
+<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:12px;padding:1.5rem 1.75rem;margin:2rem 0" id="tool-desc-box">
+  <h2 style="font-size:1.05rem;font-weight:800;color:#1e40af;margin:0 0 1rem">📋 このツールの詳細</h2>
+  <p style="color:#374151;margin:0 0 .75rem;line-height:1.8">「姿勢改善プランナー」は、計画立案や情報整理をサポートする無料のガイド・プランニングツールです。</p>
+  <p style="color:#374151;margin:0 0 .75rem;line-height:1.8">ステップに沿って進めることで、複雑なプロセスをわかりやすく整理し、抜け漏れを防ぐことができます。</p>
+  <p style="color:#374151;margin:0;line-height:1.8">初めての方でも迷わず使えるシンプルな設計で、すぐに結果を確認できます。</p>
+</div>
+<div style="background:#eaf4fb;border-left:4px solid #1976d2;padding:20px 24px;margin:24px 0;border-radius:0 8px 8px 0">
+  <h3 style="font-size:1.1rem;font-weight:800;color:#1e3a5f">このツールでできること</h3>
+  <p style="margin:8px 0 0;line-height:1.7;color:#1a1a2e">現在の姿勢の問題点・目標（肩こり解消・腰痛改善等）を入力すると、段階的な姿勢改善エクササイズプランを提案します。毎日取り組める5〜10分のルーティンも組み立てられます。</p>
+</div>
+<div style="background:#f0fdf4;border-left:4px solid #388e3c;padding:20px 24px;margin:24px 0;border-radius:0 8px 8px 0">
+  <h3 style="font-size:1.1rem;font-weight:800;color:#1b5e20">活用シーン・使い方</h3>
+  <p style="margin:8px 0 0;line-height:1.7;color:#1a1a2e">デスクワーカーの姿勢改善や、スポーツパフォーマンス向上を目指すアスリートの体幹強化プログラムとして活用できます。産後の姿勢改善にも役立てられます。</p>
+</div>
+<div style="background:#fff8e1;border-left:4px solid #f57c00;padding:20px 24px;margin:24px 0;border-radius:0 8px 8px 0">
+  <h3 style="font-size:1.1rem;font-weight:800;color:#e65100">注意点・補足</h3>
+  <p style="margin:8px 0 0;line-height:1.7;color:#1a1a2e">痛みがある状態でのエクササイズは症状を悪化させる可能性があります。痛みがある場合は運動を中止し、整形外科・理学療法士に相談してください。</p>
+</div>
+<!-- r22-editorial -->
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:.75rem;padding:1.5rem;margin:1.5rem 0">
+  <h2 style="font-size:1.05rem;font-weight:800;color:#14532d;margin:0 0 1rem;border-left:4px solid #16a34a;padding-left:.75rem">健康管理の基礎知識（厚生労働省データ）</h2>
+  <p style="font-size:.88rem;color:#4b5563;margin:0 0 .75rem">厚生労働省「国民健康栄養調査」などのデータから、日本人の健康状態と予防のポイントを整理しました。</p>
+  <table style="width:100%;border-collapse:collapse;font-size:.83rem">
+    <thead>
+      <tr style="background:#bbf7d0">
+        <th style="padding:.5rem .75rem;text-align:left;border:1px solid #bbf7d0;color:#14532d">項目</th>
+        <th style="padding:.5rem .75rem;text-align:left;border:1px solid #bbf7d0;color:#14532d">データ</th>
+        <th style="padding:.5rem .75rem;text-align:left;border:1px solid #bbf7d0;color:#14532d">出典</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#f0fdf4">
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-weight:600;color:#14532d">成人の肥満割合（BMI25以上）</td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0"><strong>男性33.0%・女性22.3%（2022年）</strong></td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-size:.78rem;color:#6b7280">厚生労働省「国民健康栄養調査」2022年</td>
+      </tr>
+      <tr style="">
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-weight:600;color:#14532d">1日の歩数の目標</td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0"><strong>男性8,000歩・女性7,000歩（厚生労働省推奨）</strong></td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-size:.78rem;color:#6b7280">厚生労働省「健康日本21（第二次）」</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-weight:600;color:#14532d">睡眠時間の目安（成人）</td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0"><strong>7〜9時間が推奨（6時間未満は健康リスク増）</strong></td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-size:.78rem;color:#6b7280">WHO・厚生労働省「健康づくりのための睡眠ガイド2023」</td>
+      </tr>
+      <tr style="">
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-weight:600;color:#14532d">生活習慣病の主な予防因子</td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0"><strong>適度な運動・バランスの良い食事・禁煙・適量飲酒</strong></td>
+        <td style="padding:.5rem .75rem;border:1px solid #bbf7d0;font-size:.78rem;color:#6b7280">厚生労働省「生活習慣病予防のための健康情報」</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:.78rem;color:#6b7280;margin:.5rem 0 0">※ 記載データは各出典の公表時点の情報です。最新情報は各公的機関の公式サイトをご確認ください。</p>
+</div>
+<!-- r20-tool-links -->
+<div id="tool-disclaimer" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1.5rem;margin:1.5rem 0;font-size:.875rem">
+  <p style="font-weight:700;color:#374151;margin:0 0 .5rem">⚠️ 計算結果の活用にあたって</p>
+  <p style="color:#4b5563;margin:0 0 .5rem;line-height:1.75">計算結果は参考値です。入力値や前提条件によって結果が変わります。重要な判断の際は最新の公式情報をご確認ください。</p>
+  <ul style="margin:0;padding-left:1.25rem;color:#4b5563;line-height:1.9"><li><a href="https://www.caa.go.jp/" target="_blank" rel="noopener noreferrer" style="color:#4f46e5;font-size:.85rem">消費者庁「くらしの安心ガイド」</a></li></ul>
+</div>
+<h2 id="faq-h" style="font-size:1.05rem;font-weight:700;margin-bottom:12px;border-left:4px solid #4f46e5;padding-left:10px;">よくある質問</h2>
+  <dl style="line-height:1.8;">
+    <dt style="font-weight:600;margin-top:12px;">Q: 診断結果はどう活用すればいいですか？</dt>
+    <dd style="margin-left:16px;color:#374151;">姿勢改善自動作成ツールに関する判断・選択の参考情報としてご活用ください。条件を変えて複数回試すことで、より広い視点で検討できます。</dd>
+    <dt style="font-weight:600;margin-top:12px;">Q: 診断を繰り返し使えますか？</dt>
+    <dd style="margin-left:16px;color:#374151;">はい、条件を変えて何度でも診断いただけます。異なるシナリオで結果を比較することで、より確かな判断材料になります。</dd>
+    <dt style="font-weight:600;margin-top:12px;">Q: 入力したデータはどこに保存されますか？</dt>
+    <dd style="margin-left:16px;color:#374151;">すべての処理はブラウザ内で完結します。入力データがサーバーに送信されることはなく、プライバシーが守られます。</dd>
+  </dl>
+</section>
+</main>
 
     
 <script>
+    // トースト表示関数
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 3000);
+    }
+
     // エクササイズデータベース：症状・姿勢タイプ別
     const EXERCISES = {
       neck: [
@@ -343,12 +464,69 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
       const isValid = workHours && postureType && exercise && pains;
       document.getElementById('calcButton').disabled = !isValid;
 
+      // エラーメッセージの表示/非表示
+      document.getElementById('error_workHours').classList.toggle('show', !workHours);
+      document.getElementById('error_pain').classList.toggle('show', !pains);
+      document.getElementById('error_postureType').classList.toggle('show', !postureType);
+      document.getElementById('error_exerciseHabit').classList.toggle('show', !exercise);
+      document.getElementById('error_all').classList.toggle('show', !isValid);
+
       // ラベルのハイライト
       document.getElementById('label_workHours').classList.toggle('label-error', !workHours);
       document.getElementById('label_pain').classList.toggle('label-error', !pains);
       document.getElementById('label_postureType').classList.toggle('label-error', !postureType);
       document.getElementById('label_exerciseHabit').classList.toggle('label-error', !exercise);
     }
+
+    // localStorage: 前回データの復元ボタンを表示
+    function updateRestoreButton() {
+      const saved = localStorage.getItem('postureData');
+      const btn = document.getElementById('restoreButton');
+      if (saved) {
+        btn.style.display = 'block';
+      } else {
+        btn.style.display = 'none';
+      }
+    }
+
+    // localStorage: 前回データを復元
+    function restorePreviousData() {
+      const saved = localStorage.getItem('postureData');
+      if (!saved) {
+        showToast('保存されたデータがありません');
+        return;
+      }
+      const data = JSON.parse(saved);
+      document.getElementById('workHours').value = data.workHours || '';
+      document.getElementById('postureType').value = data.postureType || '';
+      document.getElementById('exerciseHabit').value = data.exercise || '';
+      const painIds = ['pain_neck','pain_back','pain_eyes','pain_hip','pain_whole'];
+      painIds.forEach(id => {
+        document.getElementById(id).checked = data.pains?.includes(id.replace('pain_', '')) || false;
+      });
+      validateForm();
+      showToast('✅ 前回のデータを復元しました');
+    }
+
+    // localStorage: すべてのデータをクリア
+    function clearAllData() {
+      if (confirm('入力データと計算結果をすべてクリアしますか？')) {
+        localStorage.removeItem('postureData');
+        localStorage.removeItem('postureResult');
+        document.getElementById('workHours').value = '';
+        document.getElementById('postureType').value = '';
+        document.getElementById('exerciseHabit').value = '';
+        const painIds = ['pain_neck','pain_back','pain_eyes','pain_hip','pain_whole'];
+        painIds.forEach(id => { document.getElementById(id).checked = false; });
+        document.getElementById('result').classList.remove('show');
+        validateForm();
+        updateRestoreButton();
+        showToast('🗑️ データをクリアしました');
+      }
+    }
+
+    // グローバル変数: 最後の結果を保持
+    let lastResult = null;
 
     // プラン生成ロジック
     function buildPlan(pains, postureType, exercise) {
@@ -406,6 +584,50 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         </div>`;
       document.getElementById('breakdownOutput').innerHTML = breakdownHtml;
 
+      // Chart.js: スコアゲージを描画
+      const ctx = document.getElementById('scoreChart');
+      if (ctx) {
+        if (window.scoreChartInstance) {
+          window.scoreChartInstance.destroy();
+        }
+        window.scoreChartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: [score, 100 - score],
+              backgroundColor: [riskColor, '#e0e7ff'],
+              borderColor: 'white',
+              borderWidth: 2,
+              cutout: '65%'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: false }
+            }
+          },
+          plugins: [{
+            id: 'textCenter',
+            beforeDatasetsDraw(chart) {
+              const { width, height, ctx: c } = chart;
+              c.restore();
+              c.font = 'bold 28px Arial';
+              c.textBaseline = 'middle';
+              c.fillStyle = riskColor;
+              c.textAlign = 'center';
+              c.fillText(score + '%', width / 2, height / 2 - 8);
+              c.font = 'bold 12px Arial';
+              c.fillStyle = '#666';
+              c.fillText(riskText.replace(/[😊⚠️🔴]/g, '').trim(), width / 2, height / 2 + 12);
+              c.save();
+            }
+          }]
+        });
+      }
+
       const plan = buildPlan(pains, postureType, exercise);
       const planList = document.getElementById('planList');
       planList.innerHTML = plan.map((ex, i) => `
@@ -424,9 +646,85 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         `💡 <strong>1日ルーティン提案</strong>：朝起きたら2〜3種目（5分）、昼休みに2種目（3分）、就寝前に2〜3種目（5分）がおすすめです。<br>` +
         `📌 デスクワーク ${workLabel[workHours]} / 運動習慣 ${exLabel[exercise]} / ${plan.length}種目プランを生成しました。`;
 
+      // localStorage: 入力データと計算結果を保存
+      const inputData = { workHours, pains, postureType, exercise };
+      localStorage.setItem('postureData', JSON.stringify(inputData));
+      const resultData = { score, riskText, breakdown, plan, workLabel, exLabel };
+      localStorage.setItem('postureResult', JSON.stringify(resultData));
+
+      // 最後の結果を保持
+      lastResult = { score, pains, postureType, exercise, workLabel, exLabel, plan };
+
+      showToast('✅ 結果を自動保存しました');
       document.getElementById('result').classList.add('show');
       document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      updateRestoreButton();
     }
+
+    // 印刷機能
+    function printResult() {
+      window.print();
+    }
+
+    // クリップボードにコピー機能
+    function copyResultToClipboard() {
+      if (!lastResult) {
+        showToast('計算結果がありません');
+        return;
+      }
+      const { score, pains, postureType, exercise, workLabel, exLabel, plan } = lastResult;
+      const text = `姿勢改善プランナー 計算結果\n\n` +
+        `姿勢リスクスコア: ${score}点 / 100点\n` +
+        `\n入力条件:\n` +
+        `- デスクワーク時間: ${workLabel[document.getElementById('workHours').value]}\n` +
+        `- 痛みの部位: ${pains.join(', ')}\n` +
+        `- 姿勢の悩み: ${postureType}\n` +
+        `- 運動習慣: ${exLabel[exercise]}\n` +
+        `\n推奨エクササイズ (${plan.length}種目):\n` +
+        plan.map((ex, i) => `${i + 1}. ${ex.name} (${ex.time})\n   ${ex.desc}`).join('\n') +
+        `\n\n※ このツールの計算結果は参考値です。重要な判断の際は専門家にご相談ください。`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 結果をクリップボードにコピーしました');
+      }).catch(() => {
+        showToast('コピーに失敗しました。ブラウザを確認してください');
+      });
+    }
+
+    // ダウンロード機能
+    function downloadResult() {
+      if (!lastResult) {
+        alert('計算結果がありません');
+        return;
+      }
+      const { score, pains, postureType, exercise, workLabel, exLabel, plan } = lastResult;
+      const data = {
+        timestamp: new Date().toLocaleString('ja-JP'),
+        score: score,
+        conditions: {
+          workHours: workLabel[document.getElementById('workHours').value],
+          painAreas: pains,
+          postureType: postureType,
+          exerciseHabit: exLabel[exercise]
+        },
+        plan: plan.map(ex => ({ name: ex.name, time: ex.time, description: ex.desc }))
+      };
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `posture-plan-${new Date().getTime()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ページロード時に前回データ復元ボタンを表示
+    window.addEventListener('DOMContentLoaded', function() {
+      updateRestoreButton();
+      validateForm();
+    });
     </script>
     <!-- rakuten-affiliate-block -->
     <div style="border:1px solid #BF0000;background:#fff9f9;border-radius:10px;padding:14px;margin:12px auto;max-width:480px;text-align:center;">
@@ -473,5 +771,27 @@ AI導入・業務自動化・Webサービス開発のご相談はこちら。</p
   <a href="https://tech-and-brace.com/ai-automation?utm_source=appadaycreator&utm_medium=footer&utm_campaign=b2b_cta" target="_blank" rel="noopener" onclick="if(typeof gtag==='function'){gtag('event','b2b_cta_click',{source_page:window.location.pathname,cta_position:'footer',tool_category:document.querySelector('[aria-label=\"パンくずリスト\"] li:nth-child(3) a')?document.querySelector('[aria-label=\"パンくずリスト\"] li:nth-child(3) a').innerText:'general',destination:'https://tech-and-brace.com/ai-automation'})}" style="display:inline-block;background:#fff;color:#1e3a5f;font-size:11px;font-weight:700;padding:6px 16px;border-radius:20px;text-decoration:none;">法人・B2B相談はこちら →</a>
 </div>
 </footer>
+<div style="text-align:center;padding:10px 16px 14px;background:#eef2ff;border-top:2px solid #c7d2fe;margin-top:8px">
+<a href="/blog/" style="color:#4f46e5;font-size:.85rem;font-weight:700">📖 マネー・育児・キャリアのコラムを読む →</a>
+</div>
+<div style="background:#eef2ff;border-left:4px solid #4f46e5;border-radius:.5rem;padding:1rem 1.25rem;margin:1.5rem auto;max-width:760px;font-size:.875rem">
+<p style="margin:0 0 .5rem;font-weight:700;color:#3730a3">📖 お役立ちコラム</p>
+<ul style="margin:0;padding-left:1.25rem;color:#4f46e5;line-height:2">
+<li><a href="/blog/stock-investment-beginner/" style="color:#4f46e5">株式投資の始め方【初心者完全ガイド】</a></li>
+<li><a href="/blog/nisa-comparison/" style="color:#4f46e5">新NISA vs iDeCo 徹底比較</a></li>
+<li><a href="/blog/investment-risk-management/" style="color:#4f46e5">投資のリスク管理入門</a></li>
+</ul>
+</div>
+<!-- r17-mobile-ux -->
+<a href="#top" id="back-to-top" aria-label="ページトップへ戻る" style="display:none;position:fixed;bottom:24px;right:20px;background:#4f46e5;color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:1.4rem;line-height:48px;text-align:center;text-decoration:none;box-shadow:0 4px 12px rgba(79,70,229,.4);z-index:9000;cursor:pointer" title="ページトップへ">↑</a>
+<script>
+(function(){
+  var btn = document.getElementById('back-to-top');
+  if(!btn) return;
+  window.addEventListener('scroll', function(){
+    btn.style.display = window.scrollY > 400 ? 'block' : 'none';
+  }, {passive:true});
+})();
+</script>
 </body>
 </html>
