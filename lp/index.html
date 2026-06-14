@@ -107,7 +107,7 @@ img{max-width:100%;height:auto}
 
 /* ─── Results Preview ─── */
 .results-section{background:#fff}
-.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.results-grid{display:grid;grid-template-columns:1fr 160px 1fr;gap:20px}
 .result-score-card{background:#fff7ed;border:2px solid #EA580C;border-radius:18px;padding:24px}
 .result-score-top{text-align:center;margin-bottom:16px}
 .result-score-big{font-size:64px;font-weight:800;color:#EA580C;line-height:1}
@@ -124,6 +124,19 @@ img{max-width:100%;height:auto}
 .ex-time{font-size:11px;background:#fff7ed;color:#EA580C;padding:3px 8px;border-radius:10px;font-weight:600;white-space:nowrap;flex-shrink:0}
 .results-cta{display:block;text-align:center;background:#EA580C;color:#fff;padding:13px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;margin-top:18px;transition:opacity .2s}
 .results-cta:hover{opacity:.9}
+/* ─── Body Posture Diagram ─── */
+.body-diag-card{background:#f9fafb;border-radius:18px;padding:20px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center}
+.body-diag-title{font-size:12px;font-weight:700;color:#374151;margin-bottom:10px;line-height:1.5}
+.body-diag-legend{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.bd-legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#4b5563}
+.bd-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+/* ─── Step Score Mini ─── */
+.step-score-mini{margin-top:12px;padding:10px;background:#fff7ed;border-radius:10px}
+.step-score-mini-num{font-size:26px;font-weight:800;color:#EA580C;display:block;text-align:center;line-height:1}
+.step-score-mini-num span{font-size:13px}
+.step-score-mini-bar{width:80%;height:6px;background:#e5e7eb;border-radius:3px;margin:6px auto;overflow:hidden}
+.step-score-mini-fill{width:78%;height:100%;background:linear-gradient(90deg,#16a34a,#d97706 50%,#EA580C);border-radius:3px}
+.step-score-mini-label{font-size:11px;font-weight:600;color:#d97706;display:block;text-align:center;margin-top:4px}
 @media(max-width:768px){.results-grid{grid-template-columns:1fr}}
 
 /* ─── Calendar ─── */
@@ -349,6 +362,11 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         <img class="step-icon" src="../assets/icons/split/02-01.png" alt="スコア確認ステップ">
         <h3>スコアを確認する</h3>
         <p>姿勢リスクスコア（0〜100点）と内訳が即座に表示。どの要因がリスクを高めているか把握できます。</p>
+        <div class="step-score-mini" aria-hidden="true">
+          <span class="step-score-mini-num">78<span>点</span></span>
+          <div class="step-score-mini-bar"><div class="step-score-mini-fill"></div></div>
+          <span class="step-score-mini-label">⚠️ 中リスク</span>
+        </div>
       </div>
       <div class="step-card">
         <div class="step-num">3</div>
@@ -385,6 +403,34 @@ ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;margin:0!impor
         <div style="margin-top:14px;padding:12px;background:#f0f9ff;border-radius:10px;font-size:12px;color:#0c4a6e">
           <p style="font-weight:700;margin-bottom:6px">💡 1日ルーティン提案</p>
           <p style="line-height:1.7">朝2〜3種目（5分）、昼休み2種目（3分）、就寝前2〜3種目（5分）がおすすめです。</p>
+        </div>
+      </div>
+      <div class="body-diag-card">
+        <p class="body-diag-title">姿勢チェック<br>ポイント</p>
+        <svg viewBox="0 0 100 260" width="110" height="230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="姿勢チェックポイント図">
+          <ellipse cx="50" cy="22" rx="16" ry="18" fill="#e5e7eb"/>
+          <rect x="44" y="38" width="12" height="14" rx="2" fill="#d1d5db"/>
+          <path d="M13,53 Q27,48 44,52 L44,140 L56,140 L56,52 Q73,48 87,53 Q95,70 90,108 L80,102 L77,80 L62,74 L62,140 L38,140 L38,74 L23,80 L20,102 L10,108 Q5,70 13,53 Z" fill="#e5e7eb"/>
+          <path d="M34,140 L31,172 Q31,180 38,183 L62,183 Q69,180 69,172 L66,140 Z" fill="#e5e7eb"/>
+          <rect x="32" y="179" width="16" height="72" rx="6" fill="#e5e7eb"/>
+          <rect x="52" y="179" width="16" height="72" rx="6" fill="#e5e7eb"/>
+          <circle cx="50" cy="43" r="10" fill="#EA580C"/>
+          <text x="50" y="47" text-anchor="middle" fill="white" font-size="7.5" font-weight="bold" font-family="sans-serif">首</text>
+          <circle cx="14" cy="68" r="9" fill="#d97706"/>
+          <text x="14" y="72" text-anchor="middle" fill="white" font-size="6.5" font-weight="bold" font-family="sans-serif">肩</text>
+          <circle cx="86" cy="68" r="9" fill="#d97706"/>
+          <text x="86" y="72" text-anchor="middle" fill="white" font-size="6.5" font-weight="bold" font-family="sans-serif">肩</text>
+          <circle cx="50" cy="98" r="9" fill="#d97706"/>
+          <text x="50" y="102" text-anchor="middle" fill="white" font-size="6" font-weight="bold" font-family="sans-serif">背中</text>
+          <circle cx="50" cy="140" r="10" fill="#EA580C"/>
+          <text x="50" y="144" text-anchor="middle" fill="white" font-size="7.5" font-weight="bold" font-family="sans-serif">腰</text>
+          <circle cx="50" cy="170" r="9" fill="#16a34a"/>
+          <text x="50" y="174" text-anchor="middle" fill="white" font-size="6.5" font-weight="bold" font-family="sans-serif">骨盤</text>
+        </svg>
+        <div class="body-diag-legend">
+          <div class="bd-legend-item"><span class="bd-dot" style="background:#EA580C"></span>高リスク</div>
+          <div class="bd-legend-item"><span class="bd-dot" style="background:#d97706"></span>中リスク</div>
+          <div class="bd-legend-item"><span class="bd-dot" style="background:#16a34a"></span>良好</div>
         </div>
       </div>
       <div class="result-exercises-card">
